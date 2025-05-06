@@ -3,6 +3,17 @@
 
 <h1 class="contents">2025 멋쟁이사자처럼 13기</h1>
 <div class="contents">This is Second Page</div>
+<div>
+    {% for post in posts %}
+    <div>
+        <hr/>
+        <h3>{{post.objname}}</h3>
+        {{ post.name }} | {{ post.pub_date }}<br>
+        {{ post.objdetail }}
+        <a href="{% url 'main:detail' post.id %}">자세히 보기</a>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
 

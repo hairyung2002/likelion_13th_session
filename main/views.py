@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from .models import *
 # Create your views here.
 
 
@@ -21,4 +22,48 @@ def mainpage(request):
 
 
 def secondpage(request):
-    return render(request, "main/secondpage.html")
+    posts = Post.objects.all()
+    return render(request, "main/secondpage.html", {'posts': posts})
+
+def new_post(request):
+    return render(request, 'main/new-post.html')
+
+def detail(request, id):
+    post = get_object_or_404(Post, pk=id)
+    return render(request, 'main/detail.html', {'post': post})
+
+def edit(request, id):
+    edit_post = Post.objects.get(pk=id)
+    return render(request, 'main/edit.html', {"post": edit_post})
+
+def create(request):
+    new_post = Post()
+
+    new_post.objname = request.POST['objname']
+    new_post.name = request.POST['name']
+    new_post.objdetail = request.POST['objdetail']
+    new_post.pub_date = timezone.now()
+    new_post.image = request.FILES.get('image')
+
+    new_post.save()
+
+    return redirect('main:detail', new_post.id)
+
+def update(request, id):
+    update_post = Post.objects.get(pk=id)
+    
+    update_post.objname = request.POST['objname']
+    update_post.name = request.POST['name']
+    update_post.objdetail = request.POST['objdetail']
+    update_post.pub_date = timezone.now()
+    update_post.image = request.FILES.get('image')
+    
+    update_post.save()
+    
+    return redirect('main:detail', update_post.id)
+
+def delete(request, id):
+    delete_post= Post.objects.get(pk=id)
+    delete_post.delete()
+
+    return redirect('main/secondpage')
