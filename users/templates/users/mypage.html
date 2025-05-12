@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{%load static %}
+
+{% block content %}
+<h1>환영합니다. {{ user.username }}님</h1>
+
+<div>
+    {% for post in posts %}
+    <div>
+        <hr/>
+        <h3>{{post.objname}}</h3>
+        {{ post.name }} | {{ post.pub_date }}<br>
+        {{ post.objdetail }}
+        <a href="{% url 'main:detail' post.id %}">자세히 보기</a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
